@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
 import * as signalR from '@aspnet/signalr'
+import styled from 'styled-components'
+
+const TerminalWindow = styled.div`
+  width: 100%
+  height: 400px
+  overflow: auto
+`
 
 export default class Terminal extends Component {
   componentDidMount () {
@@ -25,20 +32,18 @@ export default class Terminal extends Component {
       .catch(err => console.error(err.toString()))
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate () {
     return false
   }
 
   render () {
     return (
-      <div>
-        <div
-          ref='terminal'
-          width='100%'
-          height='400px'
-          style={{ overflow: 'scroll' }}
-        />
-      </div>
+      <TerminalWindow
+        ref='terminal'
+        width='100%'
+        height='400px'
+        style={{ overflow: 'auto' }}
+      />
     )
   }
 }

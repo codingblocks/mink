@@ -4,31 +4,78 @@ import styled from 'styled-components'
 import Logs from './Logs'
 
 const containerStatusRefreshMs = 5000 // TODO Constant
-const restartAllContainers = () => {
-  if (window.confirm('Are you sure you want to restart all containers?')) {
-    fetch('/api/docker/restart/all', { method: 'DELETE' })
-  }
-}
-
-const stopAllContainers = () => {
-  if (window.confirm('Are you sure you want to stop all containers?')) {
-    fetch('/api/docker/stop/all', { method: 'DELETE' })
-  }
-}
 
 const Checkbox = styled.input`
   vertical-align: middle;
 `
 
 export default () => {
+  const [checked, setChecked] = useState({})
+
+  const cloneChecks = () => JSON.parse(JSON.stringify(checked))
+
+  const check = e => {
+    const nextChecks = cloneChecks()
+    nextChecks[e.target.value] = e.target.checked
+    setChecked(nextChecks)
+  }
+
+  const toggleAll = e => {
+    const nextChecks = cloneChecks()
+    const nextValue = e.target.checked
+    data.data.forEach(c => (nextChecks[c.Id] = nextValue))
+    // TODO warning
+    setChecked(nextChecks)
+  }
+
   const [data, setData] = useState({
     data: [],
     errorMessage: null,
     status: 'loading'
   })
 
+  const pruneRemovedContainers = () => {
+    // go through data.data, remove any
+    const nextChecks = cloneChecks()
+    const removeList = Object.keys(nextChecks).filter(
+      c => !data.data.find(d => (d.Id = c))
+    )
+
+    if (removeList.length) {
+      removeList.forEach(c => delete nextChecks[c])
+      setChecked(nextChecks)
+    }
+  }
+
+  const restartContainers = () => {
+    actionSelectedContainers('restart', 'DELETE')
+  }
+
+  const stopContainers = () => {
+    actionSelectedContainers('stop', 'DELETE')
+  }
+
+  const actionSelectedContainers = (verb, method) => {
+    const selected = Object.keys(checked).filter(id => checked[id])
+    if (!selected.length) {
+      alert('Please select at least one container')
+      return
+    }
+    if (
+      window.confirm(
+        `Are you sure you want to ${verb} ${selected.length} container${
+          selected.length > 1 ? 's' : ''
+        }?`
+      )
+    ) {
+      fetch(`/api/docker/${verb}/${selected.join(',')}`, {
+        method: method
+      })
+    }
+  }
+
   const refresh = () => {
-    fetch('/api/docker/containers/all')
+    fetch('/api/docker/containers')
       .then(response => response.json())
       .then(data => {
         setData({
@@ -36,6 +83,7 @@ export default () => {
           errorMessage: null,
           status: 'success'
         })
+        pruneRemovedContainers()
       })
       .catch(e => {
         setData({
@@ -74,13 +122,13 @@ export default () => {
       <div hidden={data.status !== 'loading'}>Loading...</div>
       <div hidden={data.status !== 'success'}>
         <div data-toggle='buttons'>
-          <button className='btn btn-light"' onClick={restartAllContainers}>
+          <button className='btn btn-light"' onClick={restartContainers}>
             <span role='img' aria-label='Restart containers'>
               🔄
             </span>{' '}
             Restart containers
           </button>
-          <button className='btn btn-light" mx-2' onClick={stopAllContainers}>
+          <button className='btn btn-light" mx-2' onClick={stopContainers}>
             <span role='img' aria-label='Stop containers'>
               🛑
             </span>{' '}
@@ -91,7 +139,7 @@ export default () => {
           <thead>
             <tr>
               <th scope='col'>
-                <Checkbox type='checkbox' />
+                <Checkbox type='checkbox' onClick={toggleAll} />
               </th>
               <th scope='col'>Name</th>
               <th scope='col'>Ports</th>
@@ -105,7 +153,12 @@ export default () => {
             {data.data.map(c => (
               <tr key={c.Id}>
                 <td>
-                  <Checkbox type='checkbox' />
+                  <Checkbox
+                    type='checkbox'
+                    checked={checked[c.Id]}
+                    onClick={e => check(e)}
+                    value={c.Id}
+                  />
                 </td>
                 <td>{c.Names[0]}</td>
                 <td>
