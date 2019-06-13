@@ -8,21 +8,21 @@ export default class Terminal extends Component {
       .build()
 
     const terminal = new window.Terminal()
+    window.Terminal.applyAddon(fit)
     terminal.open(this.refs.terminal)
-
+    terminal.fit() // TODO could maybe do this on resize too
     connection
       .start()
       .then(() => {
-        // recieve on method-id
+        // recieve on "method-id"
         connection.on(`${this.props.method}-${this.props.id}`, message => {
           terminal.write(message)
         })
 
-        // send on method
+        // send on "method"
         connection.invoke(this.props.method, this.props.id)
       })
       .catch(err => console.error(err.toString()))
-    console.log('didmount')
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -32,7 +32,12 @@ export default class Terminal extends Component {
   render () {
     return (
       <div>
-        <div ref='terminal' width='100%' height='400px' />
+        <div
+          ref='terminal'
+          width='100%'
+          height='400px'
+          style={{ overflow: 'scroll' }}
+        />
       </div>
     )
   }
