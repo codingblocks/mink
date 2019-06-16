@@ -94,6 +94,12 @@ export default () => {
       })
   }
 
+  const closeCommand = (method, containerId) => {
+    setCommands(
+      commands.filter(c => !(c.containerId === containerId && c.method === method))
+    )
+  }
+
   const [commands, setCommands] = useState([])
   const viewLogs = (containerId, containerName) => {
     // TODO only if it's not in there already
@@ -195,7 +201,7 @@ export default () => {
         </table>
 
         <h2 hidden={!commands.length}>Logs</h2>
-        <Logs commands={commands} />
+        <Logs commands={commands} onCloseCommand={closeCommand} />
       </div>
     </>
   )

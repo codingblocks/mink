@@ -1,11 +1,11 @@
 import React from 'react'
 import Terminal from './Terminal'
 
-export default ({ commands }) => {
+export default ({ commands, onCloseCommand }) => {
   const selectedIndex = commands.length - 1
   return (
     <>
-      <ul className='nav nav-tabs' id='myTab' role='tablist'>
+      <ul className='nav nav-tabs' role='tablist'>
         {commands.map((t, index) => (
           <li className='nav-item' key={t.containerId}>
             <a
@@ -20,11 +20,19 @@ export default ({ commands }) => {
               aria-selected={index === selectedIndex}
             >
               {t.title}
+              <button
+                className='mx-2'
+                onClick={() => onCloseCommand(t.method, t.containerId)}
+              >
+                <span role='img' aria-label='Close terminal'>
+                  ❌
+                </span>
+              </button>
             </a>
           </li>
         ))}
       </ul>
-      <div className='tab-content' id='myTabContent'>
+      <div className='tab-content'>
         {commands.map((t, index) => (
           <div
             key={t.containerId}

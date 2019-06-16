@@ -9,27 +9,36 @@ const TerminalWindow = styled.div`
 `
 
 export default class Terminal extends Component {
-  componentDidMount () {
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl('/stream')
-      .build()
+  constructor (props) {
+    super(props)
+    this.state = {
+      sendKey: props.method,
+      recieveKey: `${props.method}-${props.id}`,
+      connection: new signalR.HubConnectionBuilder().withUrl('/stream').build()
+    }
+  }
 
+  componentDidMount () {
     const terminal = new window.Terminal()
     window.Terminal.applyAddon(fit)
     terminal.open(this.refs.terminal)
-    terminal.fit() // TODO could maybe do this on resize too
+    terminal.fit() // TODO could maybe do this on resize too?
+    const { connection, recieveKey, sendKey } = this.state
+
     connection
       .start()
       .then(() => {
-        // recieve on "method-id"
-        connection.on(`${this.props.method}-${this.props.id}`, message => {
+        connection.on(recieveKey, message => {
           terminal.write(message)
         })
 
-        // send on "method"
-        connection.invoke(this.props.method, this.props.id)
+        connection.invoke(sendKey, this.props.id)
       })
-      .catch(err => console.error(err.toString()))
+      .catch(err => alert(`An error occured: ${err.toString()}`))
+  }
+
+  async componentWillUnmount () {
+    fetch(`/api/streams/kill/${this.state.recieveKey}`, { method: 'DELETE' })
   }
 
   shouldComponentUpdate () {
