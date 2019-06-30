@@ -64,7 +64,7 @@ export default () => {
     if (
       window.confirm(
         `Are you sure you want to ${verb} ${selected.length} container${
-          selected.length > 1 ? 's' : ''
+        selected.length > 1 ? 's' : ''
         }?`
       )
     ) {
@@ -109,6 +109,17 @@ export default () => {
           containerId,
           title: `${containerName} logs`,
           method: `Logs`
+        }
+      ])
+    )
+  }
+  const attach = (containerId, containerName) => {
+    setCommands(
+      commands.concat([
+        {
+          containerId,
+          title: `${containerName} attach`,
+          method: `Attach`
         }
       ])
     )
@@ -187,7 +198,7 @@ export default () => {
                 </td>
                 <td>
                   <button
-                    onClick={() => window.alert('Not done yet!')}
+                    onClick={() => attach(c.Id, c.Names[0])}
                     title='View logs'
                   >
                     <span role='img' aria-label='Attach'>

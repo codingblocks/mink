@@ -9,43 +9,62 @@ const TerminalWindow = styled.div`
 `
 
 export default class Terminal extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       sendKey: props.method,
-      recieveKey: `${props.method}-${props.id}`,
-      connection: new signalR.HubConnectionBuilder().withUrl('/stream').build()
+      processKey: `${props.method}-${props.id}`,
+      readConnection: new signalR.HubConnectionBuilder().withUrl('/stream').build(),
+      writeConnection: new signalR.HubConnectionBuilder().withUrl('/stream').build(),
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const terminal = new window.Terminal()
     window.Terminal.applyAddon(fit)
     terminal.open(this.refs.terminal)
     terminal.fit() // TODO could maybe do this on resize too?
-    const { connection, recieveKey, sendKey } = this.state
 
-    connection
+    const { readConnection, writeConnection, processKey, sendKey } = this.state
+
+    readConnection
       .start()
       .then(() => {
-        connection.on(recieveKey, message => {
-          terminal.write(message)
+        readConnection.on(processKey, message => {
+          terminal.write(message + '\r\n')
         })
 
-        connection.invoke(sendKey, this.props.id)
+        readConnection.invoke(sendKey, this.props.id)
       })
       .catch(err => alert(`An error occured: ${err.toString()}`))
+
+    writeConnection
+      .start()
+      .then(() => {
+        terminal.write('\n$ ');
+        terminal.on('key', input => {
+          //connection.invoke('Write',processKey,key }).then(() => {
+          writeConnection.invoke('Write', this.props.id, input).then(() => {
+            if (input.charCodeAt(0) === 13)
+              terminal.write('\n');
+            terminal.write(input);
+          }).catch(e => {
+            console.log(e)
+          })
+        })
+      });
+
   }
 
-  async componentWillUnmount () {
-    fetch(`/api/streams/kill/${this.state.recieveKey}`, { method: 'DELETE' })
+  async componentWillUnmount() {
+    fetch(`/api/streams/kill/${this.state.processKey}`, { method: 'DELETE' })
   }
 
-  shouldComponentUpdate () {
+  shouldComponentUpdate() {
     return false
   }
 
-  render () {
+  render() {
     return (
       <TerminalWindow
         ref='terminal'
