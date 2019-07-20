@@ -1,5 +1,5 @@
 import React from 'react'
-import Terminal from '../Terminal'
+import Terminal from './Terminal'
 
 export default ({ commands, onCloseCommand }) => {
   const selectedIndex = commands.length - 1

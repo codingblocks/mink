@@ -1,9 +1,9 @@
 ﻿import React, { Component } from 'react'
-import Pane from './ComponentPane'
-import DockerStatus from './docker/DockerStatus'
+import Pane from '../ManagementWindow'
+import DockerStatus from './DockerStatus'
 
-export class Docker extends Component {
-  static displayName = Docker.name
+export default class Home extends Component {
+  static displayName = Home.name
 
   render() {
     return (

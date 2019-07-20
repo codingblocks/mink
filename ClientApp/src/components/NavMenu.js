@@ -52,6 +52,11 @@ export class NavMenu extends Component {
                     Docker
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className='text-dark' to='/kafka'>
+                    Kafka
+                  </NavLink>
+                </NavItem>
               </ul>
             </Collapse>
           </Container>
