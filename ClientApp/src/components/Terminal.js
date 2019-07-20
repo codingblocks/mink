@@ -30,10 +30,10 @@ export default class Terminal extends Component {
     readConnection
       .start()
       .then(() => {
+        // hack!
         readConnection.on(processKey, message => {
           terminal.write(message + '\r\n')
         })
-
         readConnection.invoke(sendKey, this.props.id)
       })
       .catch(err => alert(`An error occured: ${err.toString()}`))
@@ -41,13 +41,13 @@ export default class Terminal extends Component {
     writeConnection
       .start()
       .then(() => {
-        terminal.write('\n$ ');
-        terminal.on('key', input => {
+        terminal.onKey(({ key }) => {
           //connection.invoke('Write',processKey,key }).then(() => {
-          writeConnection.invoke('Write', this.props.id, input).then(() => {
-            if (input.charCodeAt(0) === 13)
+          console.log(key.charCodeAt(0))
+          writeConnection.invoke('Write', this.props.id, key).then(() => {
+            if (key.charCodeAt(0) === 13)
               terminal.write('\n');
-            terminal.write(input);
+            terminal.write(key);
           }).catch(e => {
             console.log(e)
           })
