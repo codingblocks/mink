@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react'
-import Pane from '../ManagementWindow'
+import ManagementWindow from '../ManagementWindow'
 import DockerStatus from './DockerStatus'
+import Settings from './Settings'
 
 export default class Home extends Component {
   static displayName = Home.name
@@ -8,9 +9,9 @@ export default class Home extends Component {
   render() {
     return (
       <>
-        <Pane title='Docker Status'>
+        <ManagementWindow title='Docker' settings={Settings}>
           <DockerStatus />
-        </Pane>
+        </ManagementWindow>
       </>
     )
   }
