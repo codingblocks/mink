@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react'
 import Pane from '../ManagementWindow'
 import Settings from './Settings'
-import Groups from './Groups'
+import Groups from './Groups/Groups'
 
 export default class Home extends Component {
   render() {

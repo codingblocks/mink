@@ -12,7 +12,6 @@ export default ({ showSettings, onHide }) => {
   const saveSettings = () => {
     window.localStorage.setItem('kafka:configName', configName)
     window.localStorage.setItem('kafka:properties', properties)
-    debugger
     fetch(`/api/kafkaconfigproperties/`, {
       method: 'PUT',
       headers: {
