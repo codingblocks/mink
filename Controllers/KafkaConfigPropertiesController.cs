@@ -1,5 +1,5 @@
-using Data;
 using Microsoft.AspNetCore.Mvc;
+using mink.Domain.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace mink.Controllers
 {
-  [Route("api/[controller]")]
+    [Route("api/[controller]")]
   public class KafkaConfigPropertiesController : Controller
   {
     public class SaveKafkaPropertiesRequest
