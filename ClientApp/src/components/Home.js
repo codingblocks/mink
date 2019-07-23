@@ -5,9 +5,9 @@ export class Home extends Component {
 
   render () {
     return (
-      <>
+    <React.Fragment>
         <p>Home!</p>
-      </>
+    </React.Fragment>
     )
   }
 }

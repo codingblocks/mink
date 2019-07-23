@@ -8,11 +8,11 @@ export default class Home extends Component {
 
   render() {
     return (
-      <>
+      <React.Fragment>
         <ManagementWindow title='Docker' settings={Settings}>
           <DockerStatus />
         </ManagementWindow>
-      </>
+      </React.Fragment>
     )
   }
 }

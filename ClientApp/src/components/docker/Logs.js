@@ -4,7 +4,7 @@ import Terminal from './Terminal'
 export default ({ commands, onCloseCommand }) => {
   const selectedIndex = commands.length - 1
   return (
-    <>
+    <React.Fragment>
       <ul className='nav nav-tabs' role='tablist'>
         {commands.map((t, index) => (
           <li className='nav-item' key={t.containerId}>
@@ -49,6 +49,6 @@ export default ({ commands, onCloseCommand }) => {
           </div>
         ))}
       </div>
-    </>
+    </React.Fragment>
   )
 }

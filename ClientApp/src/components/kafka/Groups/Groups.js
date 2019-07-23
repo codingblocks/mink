@@ -15,7 +15,7 @@ export default () => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
     <p hidden={data.length}>Loading</p>
       <table hidden={!data.length} className='table table-hover table-sm mt-2' >
       <thead>
@@ -32,5 +32,5 @@ export default () => {
         {data.map(g => <Group key={g.group} group={g} />)}
       </tbody>
       </table>
-    </>)
+    </React.Fragment>)
 }

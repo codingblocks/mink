@@ -19,8 +19,8 @@ namespace mink.Controllers
     [HttpPut]
     public (KafkaClientConfig config, IEnumerable<KafkaClientConfigProperties> properties) Save([FromBody] SaveKafkaPropertiesRequest request)
     {
-      // TODO validation
-      var configId = Guid.NewGuid();
+      // TODO un-hardcode this to support multiple
+      var configId = Guid.Parse(Environment.GetEnvironmentVariable("MINK_DEFAULT_KAFKA_CONFIG_ID"));
       
       var config = new KafkaClientConfig
       {

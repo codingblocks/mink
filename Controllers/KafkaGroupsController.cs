@@ -13,7 +13,7 @@ namespace mink.Controllers
     [HttpGet]
     public IEnumerable<GroupInfo> Get()
     {
-      var properties = (new KafkaClientConfigProperties { ConfigId = Guid.Parse("99ae80c2-3b09-4e24-a082-f46b523b17d8") })
+      var properties = (new KafkaClientConfigProperties { ConfigId = Guid.Parse(Environment.GetEnvironmentVariable("MINK_DEFAULT_KAFKA_CONFIG_ID")) })
         .Get()
         .Select(x => new KeyValuePair<string,string>(x.Property, x.Value)); // TODO
 

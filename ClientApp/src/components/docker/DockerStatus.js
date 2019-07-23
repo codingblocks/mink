@@ -128,7 +128,7 @@ export default () => {
   useInterval(refresh, containerStatusRefreshMs)
 
   return (
-    <>
+    <React.Fragment>
       <div
         className='alert alert-danger'
         role='alert'
@@ -214,6 +214,6 @@ export default () => {
         <h2 hidden={!commands.length}>Logs</h2>
         <Logs commands={commands} onCloseCommand={closeCommand} />
       </div>
-    </>
+    </React.Fragment>
   )
 }

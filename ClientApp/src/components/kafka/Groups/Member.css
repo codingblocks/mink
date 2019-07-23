@@ -1,0 +1,7 @@
+﻿.member-property {
+    text-overflow: ellipsis;
+    max-width: 350px;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-flex;
+}

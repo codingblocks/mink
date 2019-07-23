@@ -44,7 +44,7 @@ export default ({ showSettings, onHide }) => {
   const cancelSettings = () => onHide()
 
   return (
-    <>
+    <React.Fragment>
       <Modal show={showSettings} title="Kafka Settings" onSave={saveSettings.bind(this)} onCancel={cancelSettings}>
         <Form>
           <FormGroup>
@@ -57,6 +57,6 @@ export default ({ showSettings, onHide }) => {
           </FormGroup>
         </Form>
       </Modal>
-    </>
+    </React.Fragment>
   )
 }

@@ -18,3 +18,14 @@ This project is still in it's infancy, so not bothering to open tickets yet. Her
 * Any way to get auto-complete behavior?
 * Processes should eventually timeout/reconnect
 * Mac/Remote Docker support (currently windows only)
+
+
+## Getting started:
+```
+# Install .net core 2.2+
+# first time only:
+cd ./ClientApp
+npm install -g create-react-app
+npm install
+# Now copy .env.example over to .env and update the settings
+```
